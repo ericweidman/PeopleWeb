@@ -6,19 +6,15 @@
     </head>
     <ul>
         {{#person}}
-        <li><a href="/person?id={{idNumber}}"> {{firstName}}{{lastName}}</a></li>
+        <li><a href="/person?id={{idNumber}}"> {{firstName}}  {{lastName}}</a></li>
         {{/person}}
     </ul>
-
 {{#last}}
 <a href = "/?userClick={{previous}}"> < </a>
 {{/last}}
-
-
 {{#next}}
 <a href = "/?userClick={{forward}}"> > </a>
 {{/next}}
-
 </form>
 </body>
 </html>
