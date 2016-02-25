@@ -1,12 +1,9 @@
 import spark.ModelAndView;
 import spark.Spark;
 import spark.template.mustache.MustacheTemplateEngine;
-
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class PeopleWeb {
     public static void main(String[] args) throws FileNotFoundException {
@@ -16,31 +13,29 @@ public class PeopleWeb {
 
         Spark.init();
 
-
         Spark.get(
                 "/",
                 ((request, response) -> {
-
+                    HashMap m = new HashMap();
                     String userClick = request.queryParams("userClick");
                     int userClickValue = 0;
-                    if(userClick != null){
+                    boolean last = false;
+                    boolean next = false;
+
+                    if (userClick != null) {
                         userClickValue = Integer.valueOf(userClick);
                     }
-
                     ArrayList<Person> twentyPeople = new ArrayList<>(allPeople.subList(userClickValue, 20 + userClickValue));
-                    HashMap m = new HashMap();
-                    boolean last = false;
-                    if(userClickValue >= 20){
+                    if (userClickValue >= 20) {
                         last = true;
                     }
-                    boolean next = false;
-                    if(userClickValue < allPeople.size()-20){
+                    if (userClickValue < allPeople.size() - 20) {
                         next = true;
                     }
 
                     m.put("person", twentyPeople);
-                    m.put("forward", userClickValue +20);
-                    m.put("previous", userClickValue -20);
+                    m.put("forward", userClickValue + 20);
+                    m.put("previous", userClickValue - 20);
                     m.put("next", next);
                     m.put("last", last);
                     return new ModelAndView(m, "home.html");
@@ -63,13 +58,12 @@ public class PeopleWeb {
         File f = new File("people.csv");
         Scanner fileScanner = new Scanner(f);
         fileScanner.nextLine();
-        while(fileScanner.hasNext()){
+        while (fileScanner.hasNext()) {
             String line = fileScanner.nextLine();
             String[] column = line.split(",");
             Person person = new Person(Integer.valueOf(column[0]),
                     column[1], column[2], column[3], column[4], column[5]);
             allPeople.add(person);
         }
-
     }
 }
