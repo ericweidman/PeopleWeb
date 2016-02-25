@@ -20,8 +20,32 @@ public class PeopleWeb {
         Spark.get(
                 "/",
                 ((request, response) -> {
+
+                    String userClick = request.queryParams("userClick");
+                    int userClickValue = 20;
+                    if(userClick != null){
+                        userClickValue = Integer.valueOf(userClick);
+                    }
+                    ArrayList<Person> twentyPeople = new ArrayList<>(allPeople.subList(userClickValue, 20 + userClickValue));
                     HashMap m = new HashMap();
-                    m.put("person", allPeople);
+                    m.put("person", twentyPeople);
+                    m.put("forward", userClickValue +20);
+                    m.put("previous", userClickValue -20);
+
+
+
+
+                    boolean last = false;
+                    if(userClickValue >= 20){
+                        last = true;
+                    }
+                    m.put("last", last);
+                    boolean next = false;
+                    if(userClickValue < allPeople.size()-20){
+                        next = true;
+                    }
+                    m.put("next", next);
+
                     return new ModelAndView(m, "home.html");
                 }),
                 new MustacheTemplateEngine()
@@ -37,9 +61,6 @@ public class PeopleWeb {
                 }),
                 new MustacheTemplateEngine()
         );
-
-
-
     }
     static void openFile(ArrayList<Person> allPeople) throws FileNotFoundException {
         File f = new File("people.csv");
@@ -54,21 +75,4 @@ public class PeopleWeb {
         }
 
     }
-
 }
-
-
-
-//        Parse the CSV file into an ArrayList<Person>.
-
-//        Create a GET route for / that simply lists the names of each person in ArrayList<Person>.
-//        It should only display 20 names, and should have a "Previous" and "Next" button at the bottom
-//        only if necessary (don't show the "Previous" button on the first page, and don't show the "Next"
-//        button on the last page). It should take a GET parameter which is the offset it is supposed to
-//        start at, like this: /?offset=20.
-
-
-//        Create another GET route called /person which displays all the data about a single person.
-//        It should take a GET parameter which is the id for that person, like this: /person?id=1
-//        Make all the people shown on the main page link to their /person page, so I can
-//        click on their names for additional information.
