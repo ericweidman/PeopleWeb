@@ -23,10 +23,10 @@ public class PeopleWeb {
 
                     String userClick = request.queryParams("userClick");
                     int userClickValue = 0;
-
                     if(userClick != null){
                         userClickValue = Integer.valueOf(userClick);
                     }
+
                     ArrayList<Person> twentyPeople = new ArrayList<>(allPeople.subList(userClickValue, 20 + userClickValue));
                     HashMap m = new HashMap();
                     boolean last = false;
