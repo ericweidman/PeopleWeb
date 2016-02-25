@@ -22,30 +22,27 @@ public class PeopleWeb {
                 ((request, response) -> {
 
                     String userClick = request.queryParams("userClick");
-                    int userClickValue = 20;
+                    int userClickValue = 0;
+
                     if(userClick != null){
                         userClickValue = Integer.valueOf(userClick);
                     }
                     ArrayList<Person> twentyPeople = new ArrayList<>(allPeople.subList(userClickValue, 20 + userClickValue));
                     HashMap m = new HashMap();
-                    m.put("person", twentyPeople);
-                    m.put("forward", userClickValue +20);
-                    m.put("previous", userClickValue -20);
-
-
-
-
                     boolean last = false;
                     if(userClickValue >= 20){
                         last = true;
                     }
-                    m.put("last", last);
                     boolean next = false;
                     if(userClickValue < allPeople.size()-20){
                         next = true;
                     }
-                    m.put("next", next);
 
+                    m.put("person", twentyPeople);
+                    m.put("forward", userClickValue +20);
+                    m.put("previous", userClickValue -20);
+                    m.put("next", next);
+                    m.put("last", last);
                     return new ModelAndView(m, "home.html");
                 }),
                 new MustacheTemplateEngine()
