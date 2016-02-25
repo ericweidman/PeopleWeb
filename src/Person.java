@@ -10,6 +10,15 @@ public class Person {
     String country;
     String ipAddress;
 
+    @Override
+    public String toString() {
+        return "Person{" +
+                "idNumber=" + idNumber +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
+
     public Person(int idNumber, String firstName, String lastName, String email, String country, String ipAddress) {
         this.idNumber = idNumber;
         this.firstName = firstName;
@@ -17,5 +26,7 @@ public class Person {
         this.email = email;
         this.country = country;
         this.ipAddress = ipAddress;
+
+
     }
 }

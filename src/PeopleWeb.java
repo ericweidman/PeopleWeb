@@ -19,13 +19,25 @@ public class PeopleWeb {
 
         Spark.get(
                 "/",
-                (((request, response) -> {
+                ((request, response) -> {
                     HashMap m = new HashMap();
                     m.put("person", allPeople);
                     return new ModelAndView(m, "home.html");
-                })),
+                }),
                 new MustacheTemplateEngine()
         );
+        Spark.get(
+                "/person",
+                ((request, response) -> {
+                    int idNumber = Integer.valueOf(request.queryParams("id"));
+                    HashMap m = new HashMap();
+                    Person person = allPeople.get(idNumber - 1);
+                    m.put("person", person);
+                    return new ModelAndView(m, "person.html");
+                }),
+                new MustacheTemplateEngine()
+        );
+
 
 
     }

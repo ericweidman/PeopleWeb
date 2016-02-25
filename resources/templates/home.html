@@ -1,18 +1,24 @@
 <html>
 <body>
 <style>
-    ul
-    {
-    list-style-type: none;
-    }
 </style>
     <head>
     </head>
     <ul>
         {{#person}}
-        <li>{{firstName}}  {{lastName}}</li>
+        <li><a href="/person?id={{idNumber}}"> {{firstName}}{{lastName}}</a></li>
         {{/person}}
     </ul>
-</ol>
+
+{{#last}}
+<a href = "/?offset={{previous}}"> < </a>
+{{/last}}
+
+
+{{#next}}
+<a href = "/?offset={{forward}}"> > </a>
+{{/next}}
+
+</form>
 </body>
 </html>
