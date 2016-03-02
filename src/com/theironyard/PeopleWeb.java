@@ -49,9 +49,37 @@ public class PeopleWeb {
         return null;
     }
 
+    public static Person populateDatabase(Connection conn) throws FileNotFoundException, SQLException {
+        File f = new File("people.csv");
+        Scanner fileScanner = new Scanner(f);
+        fileScanner.nextLine();
+        while (fileScanner.hasNext()) {
+            String line = fileScanner.nextLine();
+            String column[] = line.split(",");
+             insertPerson(conn, column[1], column[2], column[3], column[4], column[5]);
+        }
+        return null;
+    }
 
+    public static ArrayList<Person> selectPeople(Connection conn, int id) throws SQLException {
+        ArrayList<Person> persons = new ArrayList<>();
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM people where id = ?");
+        stmt.setInt(1, id);
+        ResultSet results = stmt.executeQuery();
+        while(results.next()){
+            int differentId = results.getInt("id");
+            String name = results.getString("first_name");
+            String lastName = results.getString("last_name");
+            String email = results.getString("email");
+            String country = results.getString("country");
+            String ip = results.getString("ip");
+            Person person = new Person(differentId, name, lastName, email, country, ip);
+            persons.add(person);
 
+        }
+        return persons;
 
+    }
 
     public static void main(String[] args) throws FileNotFoundException, SQLException {
         ArrayList<Person> allPeople = new ArrayList<>();
@@ -59,7 +87,6 @@ public class PeopleWeb {
         Connection conn = DriverManager.getConnection("jdbc:h2:./main");
         dropTables(conn);
         createTables(conn);
-        openFile(allPeople);
 
         Spark.init();
 
@@ -104,16 +131,19 @@ public class PeopleWeb {
                 new MustacheTemplateEngine()
         );
     }
-    static void openFile(ArrayList<Person> allPeople) throws FileNotFoundException {
-        File f = new File("people.csv");
-        Scanner fileScanner = new Scanner(f);
-        fileScanner.nextLine();
-        while (fileScanner.hasNext()) {
-            String line = fileScanner.nextLine();
-            String[] column = line.split(",");
-            Person person = new Person(Integer.valueOf(column[0]),
-                    column[1], column[2], column[3], column[4], column[5]);
-            allPeople.add(person);
-        }
-    }
 }
+
+
+
+//    static void openFile(ArrayList<Person> allPeople) throws FileNotFoundException {
+//        File f = new File("people.csv");
+//        Scanner fileScanner = new Scanner(f);
+//        fileScanner.nextLine();
+//        while (fileScanner.hasNext()) {
+//            String line = fileScanner.nextLine();
+//            String[] column = line.split(",");
+//            Person person = new Person(Integer.valueOf(column[0]),
+//                    column[1], column[2], column[3], column[4], column[5]);
+//            allPeople.add(person);
+//        }
+//    }

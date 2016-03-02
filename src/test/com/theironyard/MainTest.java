@@ -4,10 +4,12 @@ package com.theironyard;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  * Created by ericweidman on 3/2/16.
@@ -25,6 +27,7 @@ public class MainTest {
         stmt.execute("DROP TABLE people");
         conn.close();
     }
+
     @Test
     public void testInsertPerson() throws SQLException {
         Connection conn = startConnection();
@@ -36,4 +39,27 @@ public class MainTest {
 
     }
 
+    @Test
+    public void testInsertPopulate() throws SQLException, FileNotFoundException {
+        Connection conn = startConnection();
+        PeopleWeb.populateDatabase(conn);
+        Person person = PeopleWeb.selectPerson(conn, 1000);
+        endConnection(conn);
+        Assert.assertTrue(person != null);
+
+    }
+
+    @Test
+    public void testSelectPeople() throws SQLException {
+        Connection conn = startConnection();
+        PeopleWeb.insertPerson(conn, "", "", "", "", "");
+        PeopleWeb.insertPerson(conn, " ", " ", " ", " ", " ");
+        ArrayList<Person> persons = PeopleWeb.selectPeople(conn, 1);
+        endConnection(conn);
+        Assert.assertTrue(persons.size() == 1);
+
+
+
+
+    }
 }
