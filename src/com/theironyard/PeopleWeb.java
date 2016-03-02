@@ -19,12 +19,6 @@ public class PeopleWeb {
 
     }
 
-    public static void dropTables(Connection conn) throws SQLException {
-        Statement stmt = conn.createStatement();
-        stmt.execute("DROP TABLE IF EXISTS people");
-        conn.close();
-    }
-
     public static void insertPerson(Connection conn, String firstName, String lastName, String email, String country, String ipAddress) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement("INSERT INTO people VALUES (NULL, ?, ?, ?, ?, ?)");
         stmt.setString(1, firstName);
@@ -83,7 +77,6 @@ public class PeopleWeb {
     }
 
     public static void main(String[] args) throws FileNotFoundException, SQLException {
-        //ArrayList<Person> allPeople = new ArrayList<>();
 
         Connection conn = DriverManager.getConnection("jdbc:h2:./main");
         createTables(conn);
